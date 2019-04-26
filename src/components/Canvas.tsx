@@ -14,8 +14,9 @@ function Canvas({ width, height }: { width: number; height: number }) {
 
   useEffect(() => {
     if (ctx !== undefined) {
-      const canvasHelper = new CanvasHelper(ctx);
-      canvasHelper.clearCanvas();
+      const canvas = new CanvasHelper(ctx);
+      canvas.clear();
+      canvas.testDraw();
     }
   });
 
