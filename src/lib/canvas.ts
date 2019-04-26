@@ -1,3 +1,5 @@
+import Item from '../models/ItemType';
+
 export default class Canvas {
   private ctx: CanvasRenderingContext2D;
   private width: number;
@@ -28,6 +30,18 @@ export default class Canvas {
 
   public restore() {
     this.ctx.restore();
+  }
+
+  public draw(item: Item) {
+    console.log(item);
+
+    this.ctx.drawImage(
+      item.image,
+      item.xPosition,
+      item.yPosition,
+      Number(item.image.width),
+      Number(item.image.height)
+    );
   }
 
   public testDraw() {
