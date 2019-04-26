@@ -4,9 +4,12 @@ import Canvas from './components/Canvas';
 import './App.css';
 
 const App: React.FC = () => {
+  const canvasWidth = window.innerWidth;
+  const canvasHeight = window.innerHeight;
+
   return (
     <div className="App">
-      <Canvas height={400} width={400} />
+      <Canvas width={canvasWidth} height={canvasHeight} />
     </div>
   );
 };
