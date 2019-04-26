@@ -12,5 +12,7 @@
       "language": "typescriptreact",
       "autoFix": true
     }
-  ]
+  ],
+  "typescript.suggest.autoImports": false,
+  "javascript.suggest.autoImports": false
 }
