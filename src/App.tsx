@@ -3,7 +3,7 @@ import Canvas from './components/Canvas';
 
 import './App.css';
 
-const App: React.FC = () => {
+const App = () => {
   const canvasWidth = window.innerWidth;
   const canvasHeight = window.innerHeight;
 

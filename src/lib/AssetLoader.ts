@@ -21,7 +21,7 @@ import skierLeft from '../assets/skier_left.png';
 import skierLeftDown from '../assets/skier_left_down.png';
 import skierRight from '../assets/skier_right.png';
 import skierRightDown from '../assets/skier_right_down.png';
-import tree1 from '../assets/tree_1.png';
+import tree from '../assets/tree_1.png';
 import treeCluster from '../assets/tree_cluster.png';
 
 const paths = [
@@ -48,12 +48,12 @@ const paths = [
   { skierLeftDown },
   { skierRight },
   { skierRightDown },
-  { tree1 },
+  { tree },
   { treeCluster },
 ];
 
 const assetPromises: Promise<{}>[] = [];
-const assets: any = {};
+const assets: Record<string, any> = {};
 
 paths.forEach(path => {
   const keys = Object.keys(path);
