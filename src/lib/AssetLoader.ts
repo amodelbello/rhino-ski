@@ -63,6 +63,9 @@ paths.forEach(path => {
   image.src = value;
   const imagePromise = new Promise(resolve => {
     image.onload = () => {
+      // TODO: this rubs me the wrong way.
+      // We should probably provide a way
+      // to set each image dimension separately if we want.
       image.width /= 2;
       image.height /= 2;
       resolve();

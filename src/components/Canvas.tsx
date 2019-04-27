@@ -10,7 +10,9 @@ function Canvas({ width, height }: { width: number; height: number }) {
   const [ctx, setCtx] = useState();
   const [images, setImages] = useState();
 
-  // Initialize canvas and assets
+  /*
+   * Initialize canvas and assets
+   */
   useEffect(() => {
     setCtx(canvasRef.current.getContext('2d'));
     Promise.all(assetPromises).then(() => {
@@ -18,6 +20,9 @@ function Canvas({ width, height }: { width: number; height: number }) {
     });
   }, [ctx, images]);
 
+  /*
+   * Run the game
+   */
   useEffect(() => {
     if (ctx !== undefined && images !== undefined) {
       const canvas = new CanvasHelper(ctx);
