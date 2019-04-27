@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import CanvasHelper from '../lib/Canvas';
-import Item from '../types/ItemType';
 import { assets, assetPromises } from '../lib/AssetLoader';
+import Game from '../lib/Game';
 
 function Canvas({ width, height }: { width: number; height: number }) {
   const canvasRef: any = useRef(HTMLCanvasElement);
@@ -25,16 +25,8 @@ function Canvas({ width, height }: { width: number; height: number }) {
    */
   useEffect(() => {
     if (ctx !== undefined && images !== undefined) {
-      const canvas = new CanvasHelper(ctx);
-      canvas.clear();
-
-      const testCharacter: Item = {
-        image: images.skierRight,
-        xPosition: width / 2,
-        yPosition: height / 2,
-      };
-
-      canvas.draw(testCharacter);
+      const game = new Game(new CanvasHelper(ctx), images);
+      game.start();
     }
   });
 

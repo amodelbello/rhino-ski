@@ -2,8 +2,8 @@ import Item from '../types/ItemType';
 
 export default class Canvas {
   private ctx: CanvasRenderingContext2D;
-  private width: number;
-  private height: number;
+  public width: number;
+  public height: number;
 
   public constructor(
     ctx: CanvasRenderingContext2D,
