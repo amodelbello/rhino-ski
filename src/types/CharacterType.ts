@@ -3,5 +3,6 @@ import { Direction } from './Enum';
 
 export default interface Character extends Item {
   direction: Direction;
+  speed: number;
   isMoving: boolean;
 }

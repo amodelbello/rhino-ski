@@ -33,8 +33,6 @@ export default class Canvas {
   }
 
   public draw(item: Item) {
-    console.log(item);
-
     this.ctx.drawImage(
       item.image,
       item.xPosition,
