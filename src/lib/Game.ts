@@ -1,3 +1,6 @@
+import { fromEvent } from 'rxjs';
+import { pluck } from 'rxjs/operators';
+
 import CanvasHelper from './Canvas';
 import { Direction, Obstacle } from '../types/Enum';
 import { randomBetween } from './Util';
@@ -9,6 +12,7 @@ export default class Game {
   private images: Record<string, any>;
   private hero: Character;
   private obstacles: Item[];
+  private keyboard$ = fromEvent(document, 'keydown').pipe(pluck('keyCode'));
 
   public static intialNumberOfObstacles = 12;
 
@@ -69,6 +73,9 @@ export default class Game {
   }
 
   public start() {
+    this.keyboard$.subscribe(val => {
+      console.log('val', val);
+    });
     this.canvas.draw(this.hero);
     this.obstacles.forEach(obstacle => {
       this.canvas.draw(obstacle);
