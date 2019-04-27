@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import CanvasHelper from '../lib/Canvas';
-import Item from '../models/ItemType';
+import Item from '../types/ItemType';
 import { assets, assetPromises } from '../lib/AssetLoader';
 
 function Canvas({ width, height }: { width: number; height: number }) {
