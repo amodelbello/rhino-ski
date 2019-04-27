@@ -1,10 +1,7 @@
 import Item from './ItemType';
-import { Direction } from './DirectionEnum';
+import { Direction } from './Enum';
 
 export default interface Character extends Item {
-  currentImage: string;
-  currentDirection: Direction;
+  direction: Direction;
   isMoving: boolean;
-  xPosition: number;
-  yPosition: number;
 }
