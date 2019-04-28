@@ -101,7 +101,7 @@ export default class Game {
       if (this.controls.controlIsValid(Number(code))) {
         this.controls.setCurrentControl(Number(code));
         this.fireActionFromControl(this.controls.currentControl);
-        console.log(this.hero);
+        // console.log(this.hero);
       }
     });
 
@@ -156,7 +156,7 @@ export default class Game {
       this.canvas.draw(this.hero);
 
       this.moveExistingObstacles();
-      this.createNewObstacles();
+      this.createNewObstacles(this.hero.direction);
       this.removeOldObstacles();
     }
   }
@@ -190,11 +190,25 @@ export default class Game {
     });
   }
 
-  private createNewObstacles() {
-    const minX = 0 - Game.gameBoardPadding;
-    const maxX = this.canvas.width + Game.gameBoardPadding;
-    const minY = this.canvas.height;
-    const maxY = this.canvas.height + Game.gameBoardPadding;
+  private createNewObstacles(direction: Direction) {
+    let minX = 0 - Game.gameBoardPadding;
+    let maxX = this.canvas.width + Game.gameBoardPadding;
+    let minY = this.canvas.height;
+    let maxY = this.canvas.height + Game.gameBoardPadding;
+
+    if (direction === Direction.West) {
+      minX = 0 - Game.gameBoardPadding;
+      maxX = 0;
+      minY = 0;
+      maxY = this.canvas.height;
+    }
+    if (direction === Direction.East) {
+      minX = this.canvas.width;
+      maxX = this.canvas.width + Game.gameBoardPadding;
+      minY = 0;
+      maxY = this.canvas.height;
+    }
+
     let newObstacles: Item[] = [];
     if (
       randomBetween(0, Game.chanceOfNewObstacle) === Game.chanceOfNewObstacle
