@@ -9,11 +9,13 @@ export default class Actions {
   }
 
   public moveUp() {
-    this.updateHeroDirection(GameAction.MoveUp);
-    // Need to manually call this because
-    // hero will be stopped before next time through the loop
-    this.game.nextFrame();
-    this.game.hero.isMoving = false;
+    if (this.heroCanMove()) {
+      this.updateHeroDirection(GameAction.MoveUp);
+      // Need to manually call this because
+      // hero will be stopped before next time through the loop
+      this.game.nextFrame();
+      this.game.hero.isMoving = false;
+    }
   }
 
   public moveLeft() {
