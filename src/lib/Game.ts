@@ -16,16 +16,18 @@ import Controls from './Controls';
 import Actions from './Actions';
 
 export default class Game {
-  private canvas: CanvasHelper;
   private keyboard$ = fromEvent(document, 'keydown').pipe(pluck('keyCode'));
+  private canvas: CanvasHelper;
   private controls: Controls;
   private actions: Actions;
-  private currentJumpingFrame = 0;
+  private currentJumpingFrame: number;
+  private setIsPaused: Function;
 
   public images: Record<string, any>;
   public obstacles: Obstacle[];
   public gameStatus: GameStatus = 0;
   public hero: Character;
+  public isPaused: boolean;
 
   // TODO: Make all of these configurable
   public static intialNumberOfObstacles = 50;
@@ -34,13 +36,22 @@ export default class Game {
   public static defaultSpeed = 3;
   public static jumpingFramesTotalCount = 50;
 
-  public constructor(canvas: CanvasHelper, images: Record<string, any>) {
+  public constructor(
+    canvas: CanvasHelper,
+    images: Record<string, any>,
+    stateActions: any
+  ) {
     this.canvas = canvas;
     this.images = images;
     this.hero = this.initHero();
     this.obstacles = this.generateRandomObstacles(Game.intialNumberOfObstacles);
     this.controls = new Controls();
     this.actions = new Actions(this);
+    this.currentJumpingFrame = 0;
+
+    // TODO: isPaused should probably be passed into this class, not set like this
+    this.isPaused = false;
+    this.setIsPaused = stateActions.setIsPaused;
   }
 
   private initHero(): Character {
@@ -130,7 +141,6 @@ export default class Game {
       if (this.controls.controlIsValid(Number(code))) {
         this.controls.setCurrentControl(Number(code));
         this.fireActionFromControl(this.controls.currentControl);
-        // console.log(this.hero);
       }
     });
 
@@ -145,6 +155,14 @@ export default class Game {
 
     // Run the game
     this.gameLoop();
+  }
+
+  public pause() {
+    this.isPaused = true;
+  }
+
+  public resume() {
+    this.isPaused = false;
   }
 
   private gameLoop = () => {
@@ -171,8 +189,9 @@ export default class Game {
         this.actions.moveLeft();
         break;
       case ValidControl.P:
+        this.setIsPaused(!this.isPaused);
+        break;
       case ValidControl.Space:
-        this.actions.pause();
         break;
       default:
         break;
@@ -180,7 +199,7 @@ export default class Game {
   }
 
   public nextFrame() {
-    if (this.hero.isMoving) {
+    if (this.hero.isMoving && !this.isPaused) {
       this.canvas.clear();
 
       if (this.hero.isJumping) {

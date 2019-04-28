@@ -33,8 +33,6 @@ export default class Actions {
     }
   }
 
-  public pause() {}
-
   private heroCanMove(): boolean {
     if (
       this.game.gameStatus !== GameStatus.Dying &&
@@ -54,7 +52,7 @@ export default class Actions {
   }
 
   private updateHero(action: GameAction) {
-    if (!this.heroCanChangeDirection()) return;
+    if (!this.heroCanChangeDirection() || this.game.isPaused) return;
 
     // TODO: Yowsers! this is hard to read. Can this be improved?
     switch (action) {
