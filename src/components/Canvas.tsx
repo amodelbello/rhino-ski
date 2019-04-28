@@ -39,7 +39,8 @@ function Canvas({ width, height }: { width: number; height: number }) {
 
 const Styles = styled.div`
   canvas {
-    border: 1px solid green;
+    outline: 1px solid black;
+    outline-offset: -1px;
   }
 `;
 

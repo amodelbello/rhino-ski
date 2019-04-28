@@ -5,7 +5,7 @@ import './App.css';
 
 const App = () => {
   const canvasWidth = window.innerWidth;
-  const canvasHeight = window.innerHeight;
+  const canvasHeight = window.innerHeight - 3;
 
   return (
     <div className="App">

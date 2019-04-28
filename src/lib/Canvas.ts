@@ -41,17 +41,4 @@ export default class Canvas {
       Number(item.image.height)
     );
   }
-
-  public testDraw() {
-    const centerX = this.width / 2;
-    const centerY = this.height / 2;
-    const radius = 70;
-    this.ctx.beginPath();
-    this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    this.ctx.fillStyle = 'green';
-    this.ctx.fill();
-    this.ctx.lineWidth = 5;
-    this.ctx.strokeStyle = '#003300';
-    this.ctx.stroke();
-  }
 }
