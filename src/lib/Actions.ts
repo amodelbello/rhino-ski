@@ -46,7 +46,16 @@ export default class Actions {
     return false;
   }
 
+  private heroCanChangeDirection(): boolean {
+    if (!this.game.hero.isJumping) {
+      return true;
+    }
+    return false;
+  }
+
   private updateHero(action: GameAction) {
+    if (!this.heroCanChangeDirection()) return;
+
     // TODO: Yowsers! this is hard to read. Can this be improved?
     switch (action) {
       case GameAction.MoveUp:
@@ -56,18 +65,26 @@ export default class Actions {
         switch (this.game.hero.direction) {
           case Direction.Crash:
           case Direction.East:
+            this.game.hero.direction = Direction.East;
+            this.game.hero.image = this.game.images.skierRight;
+            this.game.hero.isMoving = false;
+            break;
           case Direction.SouthEast:
             this.game.hero.direction = Direction.East;
             this.game.hero.image = this.game.images.skierRight;
             break;
           case Direction.West:
+            this.game.hero.direction = Direction.West;
+            this.game.hero.image = this.game.images.skierLeft;
+            this.game.hero.isMoving = false;
+            break;
           case Direction.SouthWest:
             this.game.hero.direction = Direction.West;
             this.game.hero.image = this.game.images.skierLeft;
             break;
           case Direction.South:
-            this.game.hero.direction = Direction.SouthWest;
-            this.game.hero.image = this.game.images.skierRight;
+            break;
+          default:
             break;
         }
         break;
@@ -100,6 +117,8 @@ export default class Actions {
             this.game.hero.direction = Direction.SouthEast;
             this.game.hero.image = this.game.images.skierRightDown;
             break;
+          default:
+            break;
         }
         break;
 
@@ -131,6 +150,8 @@ export default class Actions {
             this.game.hero.direction = Direction.SouthWest;
             this.game.hero.image = this.game.images.skierLeftDown;
             break;
+          default:
+            break;
         }
         break;
 
@@ -154,6 +175,8 @@ export default class Actions {
           case Direction.East:
             this.game.hero.direction = Direction.SouthEast;
             this.game.hero.image = this.game.images.skierRightDown;
+            break;
+          default:
             break;
         }
         break;

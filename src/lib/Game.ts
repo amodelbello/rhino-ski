@@ -7,10 +7,11 @@ import {
   ObstacleType,
   GameStatus,
   ValidControl,
+  JumpStage,
 } from '../types/Enum';
 import { randomBetween, closeEnough } from './Util';
 import Character from '../types/CharacterType';
-import Item from '../types/ItemType';
+import Obstacle from '../types/ObstacleType';
 import Controls from './Controls';
 import Actions from './Actions';
 
@@ -19,16 +20,19 @@ export default class Game {
   private keyboard$ = fromEvent(document, 'keydown').pipe(pluck('keyCode'));
   private controls: Controls;
   private actions: Actions;
+  private currentJumpingFrame = 0;
 
   public images: Record<string, any>;
-  public obstacles: Item[];
+  public obstacles: Obstacle[];
   public gameStatus: GameStatus = 0;
   public hero: Character;
 
+  // TODO: Make all of these configurable
   public static intialNumberOfObstacles = 12;
   public static gameBoardPadding = 100;
   public static chanceOfNewObstacle = 20; // the lower the number the more likely the chance
   public static defaultSpeed = 3;
+  public static jumpingFramesTotalCount = 50;
 
   public constructor(canvas: CanvasHelper, images: Record<string, any>) {
     this.canvas = canvas;
@@ -48,6 +52,7 @@ export default class Game {
       direction: Direction.East,
       speed: Game.defaultSpeed,
       isMoving: false,
+      isJumping: false,
     };
   }
 
@@ -58,7 +63,7 @@ export default class Game {
     minY = 0,
     maxY = this.canvas.height
   ) {
-    const obstacles: Item[] = [];
+    const obstacles: Obstacle[] = [];
     for (let x = 0; x < count; x++) {
       const obstacleType = this.getRandomObstacleType();
       const xPosition = randomBetween(minX, maxX);
@@ -72,12 +77,13 @@ export default class Game {
   }
 
   private getRandomObstacleType() {
-    const randomNumber = randomBetween(0, 3);
+    const randomNumber = randomBetween(0, 4);
     const obstacleTypes: ObstacleType[] = [
       ObstacleType.Rock1,
       ObstacleType.Rock2,
       ObstacleType.Tree,
       ObstacleType.TreeCluster,
+      ObstacleType.Ramp,
     ];
 
     return obstacleTypes[randomNumber];
@@ -87,8 +93,9 @@ export default class Game {
     obstacleType: ObstacleType,
     xPosition: number,
     yPosition: number
-  ): Item {
+  ): Obstacle {
     return {
+      type: obstacleType,
       image: this.images[obstacleType],
       xPosition,
       yPosition,
@@ -154,12 +161,63 @@ export default class Game {
     if (this.hero.isMoving) {
       this.canvas.clear();
 
-      this.checkForCollision();
+      if (this.hero.isJumping) {
+        this.doJump();
+      } else {
+        this.checkForCollision();
+      }
+
       this.moveExistingObstacles();
       this.createNewObstacles(this.hero.direction);
       this.removeOldObstacles();
 
       this.canvas.draw(this.hero);
+    }
+  }
+
+  private doJump() {
+    if (this.currentJumpingFrame >= Game.jumpingFramesTotalCount) {
+      this.hero.isJumping = false;
+      this.hero.image = this.getHeroImageByDirection();
+    } else {
+      this.currentJumpingFrame++;
+      this.hero.image = this.images[this.determineJumpingStage()];
+    }
+  }
+
+  // TODO: This could be a lot smarter
+  private determineJumpingStage() {
+    if (this.currentJumpingFrame < 11) {
+      return JumpStage.One;
+    } else if (this.currentJumpingFrame > 10 && this.currentJumpingFrame < 21) {
+      return JumpStage.Two;
+    } else if (this.currentJumpingFrame > 20 && this.currentJumpingFrame < 31) {
+      return JumpStage.Three;
+    } else if (this.currentJumpingFrame > 30 && this.currentJumpingFrame < 41) {
+      return JumpStage.Four;
+    } else {
+      return JumpStage.Five;
+    }
+  }
+
+  private getHeroImageByDirection() {
+    switch (this.hero.direction) {
+      case Direction.Crash:
+        return this.images.skierCrash;
+      case Direction.North:
+        return this.images.skierRight;
+      case Direction.West:
+        return this.images.skierLeft;
+      case Direction.SouthWest:
+        return this.images.skierLeftDown;
+      case Direction.South:
+        return this.images.skierDown;
+      case Direction.SouthEast:
+        return this.images.skierRightDown;
+      case Direction.East:
+        return this.images.skierRight;
+      default:
+        return this.images.skierRight;
     }
   }
 
@@ -169,9 +227,20 @@ export default class Game {
         closeEnough(obstacle.xPosition, this.hero.xPosition) &&
         closeEnough(obstacle.yPosition, this.hero.yPosition)
       ) {
-        this.hero.isMoving = false;
-        this.hero.direction = Direction.Crash;
-        this.hero.image = this.images.skierCrash;
+        if (obstacle.type === ObstacleType.Ramp) {
+          if (
+            this.hero.direction === Direction.SouthWest ||
+            this.hero.direction === Direction.South ||
+            this.hero.direction === Direction.SouthEast
+          ) {
+            this.hero.isJumping = true;
+            this.currentJumpingFrame = 0;
+          }
+        } else {
+          this.hero.isMoving = false;
+          this.hero.direction = Direction.Crash;
+          this.hero.image = this.images.skierCrash;
+        }
       }
     });
   }
@@ -199,6 +268,8 @@ export default class Game {
         case Direction.West:
           obstacle.xPosition += speed;
           break;
+        default:
+          break;
       }
       this.canvas.draw(obstacle);
       return obstacle;
@@ -224,7 +295,7 @@ export default class Game {
       maxY = this.canvas.height;
     }
 
-    let newObstacles: Item[] = [];
+    let newObstacles: Obstacle[] = [];
     if (
       randomBetween(0, Game.chanceOfNewObstacle) === Game.chanceOfNewObstacle
     ) {

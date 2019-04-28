@@ -13,6 +13,7 @@ export enum ObstacleType {
   TreeCluster = 'treeCluster',
   Rock1 = 'rock1',
   Rock2 = 'rock2',
+  Ramp = 'jumpRamp',
 }
 
 export enum ValidControl {
@@ -45,4 +46,12 @@ export enum GameAction {
   MoveDown = 2,
   MoveRight = 3,
   Pause = 4,
+}
+
+export enum JumpStage {
+  One = 'skierJump1',
+  Two = 'skierJump2',
+  Three = 'skierJump3',
+  Four = 'skierJump4',
+  Five = 'skierJump5',
 }
