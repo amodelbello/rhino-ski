@@ -28,9 +28,9 @@ export default class Game {
   public hero: Character;
 
   // TODO: Make all of these configurable
-  public static intialNumberOfObstacles = 12;
+  public static intialNumberOfObstacles = 50;
   public static gameBoardPadding = 100;
-  public static chanceOfNewObstacle = 20; // the lower the number the more likely the chance
+  public static chanceOfNewObstacle = 5; // the lower the number the more likely the chance
   public static defaultSpeed = 3;
   public static jumpingFramesTotalCount = 50;
 
@@ -66,8 +66,12 @@ export default class Game {
     const obstacles: Obstacle[] = [];
     for (let x = 0; x < count; x++) {
       const obstacleType = this.getRandomObstacleType();
-      const xPosition = randomBetween(minX, maxX);
-      const yPosition = randomBetween(minY, maxY);
+      const [xPosition, yPosition] = this.getRandomObstaclePosition(
+        minX,
+        maxX,
+        minY,
+        maxY
+      );
 
       const obstacle = this.initObstacle(obstacleType, xPosition, yPosition);
       obstacles.push(obstacle);
@@ -87,6 +91,24 @@ export default class Game {
     ];
 
     return obstacleTypes[randomNumber];
+  }
+
+  private getRandomObstaclePosition(
+    minX = 0,
+    maxX = this.canvas.width,
+    minY = 0,
+    maxY = this.canvas.height
+  ): number[] {
+    const xPosition = randomBetween(minX, maxX);
+    const yPosition = randomBetween(minY, maxY);
+
+    if (
+      closeEnough(xPosition, this.hero.xPosition, 50) &&
+      closeEnough(yPosition, this.hero.yPosition, 50)
+    ) {
+      return this.getRandomObstaclePosition(minX, maxX, minY, maxY);
+    }
+    return [xPosition, yPosition];
   }
 
   private initObstacle(
@@ -307,7 +329,7 @@ export default class Game {
 
   private removeOldObstacles() {
     this.obstacles = this.obstacles.filter(
-      obstacle => obstacle.yPosition >= 0 - Number(obstacle.image.height) - 5000
+      obstacle => obstacle.yPosition >= 0 - Number(obstacle.image.height) - 500
     );
   }
 }
