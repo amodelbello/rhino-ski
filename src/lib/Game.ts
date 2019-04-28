@@ -8,7 +8,7 @@ import {
   GameStatus,
   ValidControl,
 } from '../types/Enum';
-import { randomBetween } from './Util';
+import { randomBetween, closeEnough } from './Util';
 import Character from '../types/CharacterType';
 import Item from '../types/ItemType';
 import Controls from './Controls';
@@ -153,12 +153,27 @@ export default class Game {
   public nextFrame() {
     if (this.hero.isMoving) {
       this.canvas.clear();
-      this.canvas.draw(this.hero);
 
+      this.checkForCollision();
       this.moveExistingObstacles();
       this.createNewObstacles(this.hero.direction);
       this.removeOldObstacles();
+
+      this.canvas.draw(this.hero);
     }
+  }
+
+  private checkForCollision() {
+    this.obstacles.forEach(obstacle => {
+      if (
+        closeEnough(obstacle.xPosition, this.hero.xPosition) &&
+        closeEnough(obstacle.yPosition, this.hero.yPosition)
+      ) {
+        this.hero.isMoving = false;
+        this.hero.direction = Direction.Crash;
+        this.hero.image = this.images.skierCrash;
+      }
+    });
   }
 
   public moveExistingObstacles(speed: number = this.hero.speed) {
