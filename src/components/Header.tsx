@@ -1,16 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import config from '../gameConfig';
 
 const Header = ({
-  isPaused,
-  setIsPaused,
   timeRemaining,
+  score,
 }: {
-  isPaused: boolean;
-  setIsPaused: Dispatch<SetStateAction<boolean>>;
   timeRemaining: number;
+  score: number;
 }) => {
   return (
     <Styles>
@@ -21,13 +19,7 @@ const Header = ({
             {timeRemaining || config.timeLimit}
           </span>
         </h1>
-        <button
-          onClick={() => {
-            setIsPaused(!isPaused);
-          }}
-        >
-          Pause
-        </button>
+        <div>Score: {score || 0}</div>
       </header>
     </Styles>
   );

@@ -6,6 +6,7 @@ const config = {
   jumpingFramesTotalCount: 50,
   eatingFramesTotalCount: 60,
   timeLimit: 10,
+  rampScoreValue: 150,
 };
 
 export default config;

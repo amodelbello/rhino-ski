@@ -18,6 +18,7 @@ function Canvas({
   setGame,
   isPaused,
   setIsPaused,
+  setScore,
   timeRemaining,
   setTimeRemaining,
 }: {
@@ -27,6 +28,7 @@ function Canvas({
   setGame: Dispatch<SetStateAction<Game>>;
   isPaused: boolean;
   setIsPaused: Dispatch<SetStateAction<boolean>>;
+  setScore: Dispatch<SetStateAction<number>>;
   timeRemaining: number;
   setTimeRemaining: Dispatch<SetStateAction<number>>;
 }) {
@@ -48,6 +50,7 @@ function Canvas({
           setIsPaused,
           timeRemaining,
           setTimeRemaining,
+          setScore,
         })
       );
     }

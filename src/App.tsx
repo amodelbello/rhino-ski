@@ -13,6 +13,7 @@ const App = () => {
   const canvasHeight = window.innerHeight - 103;
 
   const [isPaused, setIsPaused] = useState(false);
+  const [score, setScore] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(config.timeLimit);
   const [game, setGame] = useState();
 
@@ -22,11 +23,7 @@ const App = () => {
   return (
     <Styles>
       <div className="App">
-        <Header
-          isPaused={isPaused}
-          setIsPaused={setIsPaused}
-          timeRemaining={timeRemaining}
-        />
+        <Header timeRemaining={timeRemaining} score={score} />
         <Canvas
           width={canvasWidth}
           height={canvasHeight}
@@ -35,6 +32,7 @@ const App = () => {
           isPaused={isPaused}
           setIsPaused={setIsPaused}
           timeRemaining={timeRemaining}
+          setScore={setScore}
           setTimeRemaining={setTimeRemaining}
         />
         <PauseModal on={isPaused} toggle={togglePause} />

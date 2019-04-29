@@ -19,6 +19,7 @@ export default class Game {
     fromEvent(document, 'keyup')
   );
   private controls: Controls;
+  private score: number;
 
   public heroHelper: HeroHelper;
   public hero: Character;
@@ -35,6 +36,7 @@ export default class Game {
   public currentEatingFrame: number;
   public isPaused: boolean;
   public setIsPaused: Function;
+  public setScore: Function;
   public setTimeRemaining: Function;
 
   public constructor(
@@ -59,9 +61,10 @@ export default class Game {
     this.currentJumpingFrame = 0;
     this.currentEatingFrame = 0;
 
-    // TODO: isPaused should probably be passed into this class, not set like this
     this.isPaused = false;
     this.setIsPaused = stateActions.setIsPaused;
+    this.score = 0;
+    this.setScore = stateActions.setScore;
     this.setTimeRemaining = stateActions.setTimeRemaining;
   }
 
@@ -164,6 +167,7 @@ export default class Game {
         closeEnough(obstacle.yPosition, this.hero.yPosition)
       ) {
         if (obstacle.type === ObstacleType.Ramp) {
+          this.scoreRamp();
           if (
             this.hero.direction === Direction.SouthWest ||
             this.hero.direction === Direction.South ||
@@ -179,5 +183,10 @@ export default class Game {
         }
       }
     });
+  }
+
+  private scoreRamp(): void {
+    this.score += config.rampScoreValue;
+    this.setScore(this.score);
   }
 }
