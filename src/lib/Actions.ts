@@ -1,6 +1,6 @@
 import config from '../gameConfig';
 import Game from './Game';
-import { Direction, GameAction } from '../types/Enum';
+import { Direction, GameAction, GameStatus } from '../types/Enum';
 
 export default class Actions {
   private game: Game;
@@ -12,18 +12,21 @@ export default class Actions {
   public moveUp(): void {
     if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveUp);
+      this.kickOffTimer();
     }
   }
 
   public moveLeft(): void {
     if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveLeft);
+      this.kickOffTimer();
     }
   }
 
   public moveRight(): void {
     if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveRight);
+      this.kickOffTimer();
     }
   }
 
@@ -31,6 +34,7 @@ export default class Actions {
     if (this.game.heroHelper.heroCanMove()) {
       this.game.hero.isMoving = true;
       this.updateHero(GameAction.MoveDown);
+      this.kickOffTimer();
     }
   }
 
@@ -43,6 +47,13 @@ export default class Actions {
   public normalSpeed(): void {
     if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.NormalSpeed);
+    }
+  }
+
+  private kickOffTimer() {
+    if (this.game.gameStatus === GameStatus.Unstarted) {
+      this.game.gameStatus = GameStatus.Skiing;
+      this.game.timer.start();
     }
   }
 
@@ -60,7 +71,6 @@ export default class Actions {
     if (!this.game.heroHelper.heroCanChangeDirection() || this.game.isPaused)
       return;
 
-    // TODO: Yowsers! this is hard to read. Can this be improved?
     switch (action) {
       case GameAction.MoveUp:
         if (!this.game.hero.isMoving) {

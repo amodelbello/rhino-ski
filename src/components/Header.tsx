@@ -1,17 +1,26 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
+import config from '../gameConfig';
+
 const Header = ({
   isPaused,
   setIsPaused,
+  timeRemaining,
 }: {
   isPaused: boolean;
   setIsPaused: Dispatch<SetStateAction<boolean>>;
+  timeRemaining: number;
 }) => {
   return (
     <Styles>
       <header>
-        <h1>Rhino Ski!</h1>
+        <h1>
+          Rhino Ski!:{' '}
+          <span className={timeRemaining < 1 ? 'danger' : ''}>
+            {timeRemaining || config.timeLimit}
+          </span>
+        </h1>
         <button
           onClick={() => {
             setIsPaused(!isPaused);
@@ -35,6 +44,9 @@ const Styles = styled.span`
   header h1 {
     padding: 20px;
     margin: 0;
+  }
+  .danger {
+    color: red;
   }
 `;
 

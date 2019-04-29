@@ -11,6 +11,7 @@ import Actions from './Actions';
 import HeroHelper from './Hero';
 import VillainHelper from './Villain';
 import ObstacleHelper from './Obstacle';
+import Timer from './Timer';
 
 export default class Game {
   private keyboard$ = merge(
@@ -28,11 +29,13 @@ export default class Game {
   public obstacles: Obstacle[];
   public canvasHelper: CanvasHelper;
   public images: Record<string, any>;
+  public timer: Timer;
   public gameStatus: GameStatus = 0;
   public currentJumpingFrame: number;
   public currentEatingFrame: number;
   public isPaused: boolean;
   public setIsPaused: Function;
+  public setTimeRemaining: Function;
 
   public constructor(
     canvas: CanvasHelper,
@@ -49,6 +52,8 @@ export default class Game {
     this.obstacles = this.obstacleHelper.generateRandomObstacles(
       config.intialNumberOfObstacles
     );
+    this.timer = new Timer(this, config.timeLimit);
+    // TODO: rename
     this.controls = new Controls(this);
     this.actionsHelper = new Actions(this);
     this.currentJumpingFrame = 0;
@@ -57,6 +62,7 @@ export default class Game {
     // TODO: isPaused should probably be passed into this class, not set like this
     this.isPaused = false;
     this.setIsPaused = stateActions.setIsPaused;
+    this.setTimeRemaining = stateActions.setTimeRemaining;
   }
 
   public start(): void {
@@ -85,7 +91,7 @@ export default class Game {
     this.canvasHelper.draw(this.villain);
 
     // Set initial game status
-    this.gameStatus = GameStatus.Stopped;
+    this.gameStatus = GameStatus.Unstarted;
 
     // Run the game
     this.gameLoop();
@@ -93,10 +99,14 @@ export default class Game {
 
   public pause(): void {
     this.isPaused = true;
+    this.timer.stop();
   }
 
   public resume(): void {
     this.isPaused = false;
+    if (this.gameStatus !== GameStatus.Unstarted) {
+      this.timer.start();
+    }
   }
 
   private gameLoop = (): void => {

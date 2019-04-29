@@ -31,15 +31,10 @@ export enum ValidControl {
   Esc = 27,
 }
 
-// TODO: I dont' think we need this one
 export enum GameStatus {
-  Stopped = 0,
+  Unstarted = 0,
   Skiing = 1,
-  Jumping = 2,
-  Crashed = 3,
-  Dying = 4,
   Dead = 5,
-  Paused = 6,
 }
 
 export enum GameAction {

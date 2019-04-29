@@ -14,18 +14,25 @@ import Game from '../lib/Game';
 function Canvas({
   width,
   height,
+  game,
+  setGame,
   isPaused,
   setIsPaused,
+  timeRemaining,
+  setTimeRemaining,
 }: {
   width: number;
   height: number;
+  game: Game;
+  setGame: Dispatch<SetStateAction<Game>>;
   isPaused: boolean;
   setIsPaused: Dispatch<SetStateAction<boolean>>;
+  timeRemaining: number;
+  setTimeRemaining: Dispatch<SetStateAction<number>>;
 }) {
   const canvasRef: any = useRef(HTMLCanvasElement);
   const [ctx, setCtx] = useState();
   const [images, setImages] = useState();
-  const [game, setGame] = useState();
 
   /*
    * Initialize canvas, assets, and game
@@ -36,9 +43,16 @@ function Canvas({
       setImages(assets);
     });
     if (ctx !== undefined && images !== undefined) {
-      setGame(new Game(new CanvasHelper(ctx), images, { setIsPaused }));
+      setGame(
+        new Game(new CanvasHelper(ctx), images, {
+          setIsPaused,
+          timeRemaining,
+          setTimeRemaining,
+        })
+      );
     }
-  }, [ctx, images, setIsPaused]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctx, images, setGame, setIsPaused, setTimeRemaining]);
 
   /*
    * Run the game
