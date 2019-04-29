@@ -1,5 +1,4 @@
-import { fromEvent } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { fromEvent, merge } from 'rxjs';
 
 import config from '../gameConfig';
 import CanvasHelper from './Canvas';
@@ -13,7 +12,10 @@ import HeroHelper from './Hero';
 import ObstacleHelper from './Obstacle';
 
 export default class Game {
-  private keyboard$ = fromEvent(document, 'keydown').pipe(pluck('keyCode'));
+  private keyboard$ = merge(
+    fromEvent(document, 'keydown'),
+    fromEvent(document, 'keyup')
+  );
   private controls: Controls;
   private heroHelper: HeroHelper;
 
@@ -52,10 +54,19 @@ export default class Game {
 
   public start() {
     // Subscribe to keyboard observable
-    this.keyboard$.subscribe(code => {
-      if (this.controls.controlIsValid(Number(code))) {
-        this.controls.setCurrentControl(Number(code));
-        this.controls.fireActionFromControl(this.controls.currentControl);
+    this.keyboard$.subscribe((event: Event) => {
+      if (event instanceof KeyboardEvent) {
+        const { keyCode, type } = event;
+        if (this.controls.controlIsValid(Number(keyCode))) {
+          const controlMethod = this.controls.getControlMethodFromEventType(
+            type
+          );
+          this.controls.setCurrentControl(Number(keyCode));
+          this.controls.fireActionFromControl(
+            this.controls.currentControl,
+            controlMethod
+          );
+        }
       }
     });
 

@@ -1,5 +1,5 @@
 import Game from './Game';
-import { ValidControl } from '../types/Enum';
+import { ValidControl, ControlMethod } from '../types/Enum';
 
 export default class Controls {
   public game: Game;
@@ -23,28 +23,57 @@ export default class Controls {
     return false;
   }
 
-  public fireActionFromControl(control: ValidControl) {
+  public getControlMethodFromEventType(type: string): ControlMethod {
+    let controlMethod: ControlMethod;
+    if (type === ControlMethod.KeyDown.valueOf()) {
+      controlMethod = ControlMethod.KeyDown;
+    } else if (type === ControlMethod.KeyUp.valueOf()) {
+      controlMethod = ControlMethod.KeyUp;
+    } else {
+      controlMethod = ControlMethod.Null;
+    }
+
+    return controlMethod;
+  }
+
+  public fireActionFromControl(control: ValidControl, method: ControlMethod) {
     switch (control) {
       case ValidControl.Up:
       case ValidControl.W:
-        this.game.actionsHelper.moveUp();
+        if (method === ControlMethod.KeyDown) {
+          this.game.actionsHelper.moveUp();
+        }
         break;
       case ValidControl.Right:
       case ValidControl.D:
-        this.game.actionsHelper.moveRight();
+        if (method === ControlMethod.KeyDown) {
+          this.game.actionsHelper.moveRight();
+        }
         break;
       case ValidControl.Down:
       case ValidControl.S:
-        this.game.actionsHelper.moveDown();
+        if (method === ControlMethod.KeyDown) {
+          this.game.actionsHelper.moveDown();
+        }
         break;
       case ValidControl.Left:
       case ValidControl.A:
-        this.game.actionsHelper.moveLeft();
+        if (method === ControlMethod.KeyDown) {
+          this.game.actionsHelper.moveLeft();
+        }
         break;
       case ValidControl.P:
-        this.game.setIsPaused(!this.game.isPaused);
+        if (method === ControlMethod.KeyDown) {
+          this.game.setIsPaused(!this.game.isPaused);
+        }
         break;
       case ValidControl.Space:
+        if (method === ControlMethod.KeyDown) {
+          this.game.actionsHelper.speedBoost();
+        }
+        if (method === ControlMethod.KeyUp) {
+          this.game.actionsHelper.normalSpeed();
+        }
         break;
       default:
         break;

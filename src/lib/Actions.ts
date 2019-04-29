@@ -1,3 +1,4 @@
+import config from '../gameConfig';
 import Game from './Game';
 import { GameStatus, Direction, GameAction } from '../types/Enum';
 
@@ -30,6 +31,18 @@ export default class Actions {
     if (this.heroCanMove()) {
       this.game.hero.isMoving = true;
       this.updateHero(GameAction.MoveDown);
+    }
+  }
+
+  public speedBoost() {
+    if (this.heroCanMove()) {
+      this.updateHero(GameAction.SpeedBoost);
+    }
+  }
+
+  public normalSpeed() {
+    if (this.heroCanMove()) {
+      this.updateHero(GameAction.NormalSpeed);
     }
   }
 
@@ -177,6 +190,12 @@ export default class Actions {
           default:
             break;
         }
+        break;
+      case GameAction.SpeedBoost:
+        this.game.hero.speed = config.defaultSpeed * 2;
+        break;
+      case GameAction.NormalSpeed:
+        this.game.hero.speed = config.defaultSpeed;
         break;
       default:
         break;

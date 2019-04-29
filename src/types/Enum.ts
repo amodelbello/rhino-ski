@@ -30,6 +30,7 @@ export enum ValidControl {
   Space = 32,
 }
 
+// TODO: I dont' think we need this one
 export enum GameStatus {
   Stopped = 0,
   Skiing = 1,
@@ -46,6 +47,8 @@ export enum GameAction {
   MoveDown = 2,
   MoveRight = 3,
   Pause = 4,
+  SpeedBoost = 5,
+  NormalSpeed = 6,
 }
 
 export enum JumpStage {
@@ -54,4 +57,10 @@ export enum JumpStage {
   Three = 'skierJump3',
   Four = 'skierJump4',
   Five = 'skierJump5',
+}
+
+export enum ControlMethod {
+  Null = 'null',
+  KeyDown = 'keydown',
+  KeyUp = 'keyup',
 }
