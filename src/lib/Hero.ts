@@ -1,7 +1,7 @@
 import config from '../gameConfig';
 import Game from './Game';
 import Character from '../types/CharacterType';
-import { Direction, JumpStage } from '../types/Enum';
+import { GameStatus, Direction, JumpStage } from '../types/Enum';
 
 export default class Hero {
   public game: Game;
@@ -23,7 +23,7 @@ export default class Hero {
     };
   }
 
-  public getHeroImageByDirection() {
+  public getHeroImageByDirection(): CanvasImageSource {
     switch (this.game.hero.direction) {
       case Direction.Crash:
         return this.game.images.skierCrash;
@@ -44,7 +44,7 @@ export default class Hero {
     }
   }
 
-  public doJump() {
+  public doJump(): void {
     if (this.game.currentJumpingFrame >= config.jumpingFramesTotalCount) {
       this.game.hero.isJumping = false;
       this.game.hero.image = this.getHeroImageByDirection();
@@ -54,8 +54,26 @@ export default class Hero {
     }
   }
 
+  public heroCanMove(): boolean {
+    if (
+      this.game.gameStatus !== GameStatus.Dying &&
+      this.game.gameStatus !== GameStatus.Dead &&
+      this.game.gameStatus !== GameStatus.Paused
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  public heroCanChangeDirection(): boolean {
+    if (!this.game.hero.isJumping) {
+      return true;
+    }
+    return false;
+  }
+
   // TODO: This could be a lot smarter
-  public determineJumpingStage() {
+  public determineJumpingStage(): JumpStage {
     if (this.game.currentJumpingFrame < 11) {
       return JumpStage.One;
     } else if (

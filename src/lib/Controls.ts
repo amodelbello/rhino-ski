@@ -9,14 +9,14 @@ export default class Controls {
     this.game = game;
   }
 
-  public setCurrentControl(code: number) {
+  public setCurrentControl(code: number): void {
     if (this.controlIsValid(code)) {
       const controlValue = ValidControl[code] as keyof typeof ValidControl;
       this.currentControl = ValidControl[controlValue];
     }
   }
 
-  public controlIsValid(code: number) {
+  public controlIsValid(code: number): boolean {
     if (ValidControl[code] !== undefined) {
       return true;
     }
@@ -36,7 +36,10 @@ export default class Controls {
     return controlMethod;
   }
 
-  public fireActionFromControl(control: ValidControl, method: ControlMethod) {
+  public fireActionFromControl(
+    control: ValidControl,
+    method: ControlMethod
+  ): void {
     switch (control) {
       case ValidControl.Up:
       case ValidControl.W:

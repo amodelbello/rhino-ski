@@ -17,7 +17,7 @@ export default class Obstacle {
     maxX = this.game.canvasHelper.width,
     minY = 0,
     maxY = this.game.canvasHelper.height
-  ) {
+  ): ObstacleModel[] {
     const obstacles: ObstacleModel[] = [];
     for (let x = 0; x < count; x++) {
       const obstacleType = this.getRandomObstacleType();
@@ -35,7 +35,7 @@ export default class Obstacle {
     return obstacles;
   }
 
-  private getRandomObstacleType() {
+  private getRandomObstacleType(): ObstacleType {
     const randomNumber = randomBetween(0, 4);
     const obstacleTypes: ObstacleType[] = [
       ObstacleType.Rock1,
@@ -79,7 +79,7 @@ export default class Obstacle {
     };
   }
 
-  public moveExistingObstacles(speed: number = this.game.hero.speed) {
+  public moveExistingObstacles(speed: number = this.game.hero.speed): void {
     this.game.obstacles = this.game.obstacles.map(obstacle => {
       switch (this.game.hero.direction) {
         case Direction.North:
@@ -110,7 +110,7 @@ export default class Obstacle {
     });
   }
 
-  public createNewObstacles(direction: Direction) {
+  public createNewObstacles(direction: Direction): void {
     let minX = 0 - config.gameBoardPadding;
     let maxX = this.game.canvasHelper.width + config.gameBoardPadding;
     let minY = this.game.canvasHelper.height;
@@ -140,7 +140,7 @@ export default class Obstacle {
     this.game.obstacles = this.game.obstacles.concat(newObstacles);
   }
 
-  public removeOldObstacles() {
+  public removeOldObstacles(): void {
     this.game.obstacles = this.game.obstacles.filter(
       obstacle => obstacle.yPosition >= 0 - Number(obstacle.image.height) - 500
     );

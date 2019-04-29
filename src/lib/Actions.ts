@@ -1,6 +1,6 @@
 import config from '../gameConfig';
 import Game from './Game';
-import { GameStatus, Direction, GameAction } from '../types/Enum';
+import { Direction, GameAction } from '../types/Enum';
 
 export default class Actions {
   private game: Game;
@@ -9,63 +9,56 @@ export default class Actions {
     this.game = game;
   }
 
-  public moveUp() {
-    if (this.heroCanMove()) {
+  public moveUp(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveUp);
     }
   }
 
-  public moveLeft() {
-    if (this.heroCanMove()) {
+  public moveLeft(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveLeft);
     }
   }
 
-  public moveRight() {
-    if (this.heroCanMove()) {
+  public moveRight(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.MoveRight);
     }
   }
 
-  public moveDown() {
-    if (this.heroCanMove()) {
+  public moveDown(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.game.hero.isMoving = true;
       this.updateHero(GameAction.MoveDown);
     }
   }
 
-  public speedBoost() {
-    if (this.heroCanMove()) {
+  public speedBoost(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.SpeedBoost);
     }
   }
 
-  public normalSpeed() {
-    if (this.heroCanMove()) {
+  public normalSpeed(): void {
+    if (this.game.heroHelper.heroCanMove()) {
       this.updateHero(GameAction.NormalSpeed);
     }
   }
 
-  private heroCanMove(): boolean {
-    if (
-      this.game.gameStatus !== GameStatus.Dying &&
-      this.game.gameStatus !== GameStatus.Dead &&
-      this.game.gameStatus !== GameStatus.Paused
-    ) {
-      return true;
-    }
-    return false;
+  private hike(direction: Direction): void {
+    const currentDirection = this.game.hero.direction;
+    this.game.hero.isMoving = true;
+    this.game.hero.direction = direction;
+    this.game.obstacleHelper.moveExistingObstacles(2);
+    this.game.nextFrame();
+    this.game.hero.direction = currentDirection;
+    this.game.hero.isMoving = false;
   }
 
-  private heroCanChangeDirection(): boolean {
-    if (!this.game.hero.isJumping) {
-      return true;
-    }
-    return false;
-  }
-
-  private updateHero(action: GameAction) {
-    if (!this.heroCanChangeDirection() || this.game.isPaused) return;
+  private updateHero(action: GameAction): void {
+    if (!this.game.heroHelper.heroCanChangeDirection() || this.game.isPaused)
+      return;
 
     // TODO: Yowsers! this is hard to read. Can this be improved?
     switch (action) {
@@ -200,15 +193,5 @@ export default class Actions {
       default:
         break;
     }
-  }
-
-  private hike(direction: Direction) {
-    const currentDirection = this.game.hero.direction;
-    this.game.hero.isMoving = true;
-    this.game.hero.direction = direction;
-    this.game.obstacleHelper.moveExistingObstacles(2);
-    this.game.nextFrame();
-    this.game.hero.direction = currentDirection;
-    this.game.hero.isMoving = false;
   }
 }

@@ -17,8 +17,8 @@ export default class Game {
     fromEvent(document, 'keyup')
   );
   private controls: Controls;
-  private heroHelper: HeroHelper;
 
+  public heroHelper: HeroHelper;
   public actionsHelper: Actions;
   public canvasHelper: CanvasHelper;
   public obstacleHelper: ObstacleHelper;
@@ -52,12 +52,11 @@ export default class Game {
     this.setIsPaused = stateActions.setIsPaused;
   }
 
-  public start() {
+  public start(): void {
     // Subscribe to keyboard observable
     this.keyboard$.subscribe((event: Event) => {
       if (event instanceof KeyboardEvent) {
         const { keyCode, type } = event;
-        console.log(keyCode);
         if (this.controls.controlIsValid(Number(keyCode))) {
           const controlMethod = this.controls.getControlMethodFromEventType(
             type
@@ -84,20 +83,20 @@ export default class Game {
     this.gameLoop();
   }
 
-  public pause() {
+  public pause(): void {
     this.isPaused = true;
   }
 
-  public resume() {
+  public resume(): void {
     this.isPaused = false;
   }
 
-  private gameLoop = () => {
+  private gameLoop = (): void => {
     this.nextFrame();
     requestAnimationFrame(this.gameLoop);
   };
 
-  public nextFrame() {
+  public nextFrame(): void {
     if (this.hero.isMoving && !this.isPaused) {
       this.canvasHelper.clear();
 
@@ -115,7 +114,7 @@ export default class Game {
     }
   }
 
-  private checkForCollision() {
+  private checkForCollision(): void {
     this.obstacles.forEach(obstacle => {
       if (
         closeEnough(obstacle.xPosition, this.hero.xPosition) &&

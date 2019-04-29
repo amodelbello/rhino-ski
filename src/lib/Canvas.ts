@@ -15,24 +15,24 @@ export default class Canvas {
     this.height = height;
   }
 
-  public clear() {
+  public clear(): void {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
-  public scale() {
+  public scale(): void {
     // TODO: Look into what this actually does
     this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
 
-  public save() {
+  public save(): void {
     this.ctx.save();
   }
 
-  public restore() {
+  public restore(): void {
     this.ctx.restore();
   }
 
-  public draw(item: Item) {
+  public draw(item: Item): void {
     this.ctx.drawImage(
       item.image,
       item.xPosition,
