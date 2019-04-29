@@ -57,6 +57,7 @@ export default class Game {
     this.keyboard$.subscribe((event: Event) => {
       if (event instanceof KeyboardEvent) {
         const { keyCode, type } = event;
+        console.log(keyCode);
         if (this.controls.controlIsValid(Number(keyCode))) {
           const controlMethod = this.controls.getControlMethodFromEventType(
             type

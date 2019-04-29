@@ -67,6 +67,9 @@ export default class Controls {
           this.game.setIsPaused(!this.game.isPaused);
         }
         break;
+      case ValidControl.Esc:
+        this.game.setIsPaused(false);
+        break;
       case ValidControl.Space:
         if (method === ControlMethod.KeyDown) {
           this.game.actionsHelper.speedBoost();

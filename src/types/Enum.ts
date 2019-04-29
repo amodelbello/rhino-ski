@@ -28,6 +28,7 @@ export enum ValidControl {
   A = 65,
   P = 80,
   Space = 32,
+  Esc = 27,
 }
 
 // TODO: I dont' think we need this one
