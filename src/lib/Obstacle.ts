@@ -1,6 +1,6 @@
 import Game from './Game';
 import ObstacleModel from '../types/ObstacleType';
-import { ObstacleType } from '../types/Enum';
+import { Direction, ObstacleType } from '../types/Enum';
 import { randomBetween, closeEnough } from './Util';
 
 export default class Obstacle {
@@ -76,5 +76,71 @@ export default class Obstacle {
       xPosition,
       yPosition,
     };
+  }
+
+  public moveExistingObstacles(speed: number = this.game.hero.speed) {
+    this.game.obstacles = this.game.obstacles.map(obstacle => {
+      switch (this.game.hero.direction) {
+        case Direction.North:
+          obstacle.yPosition += speed;
+          break;
+        case Direction.East:
+          obstacle.xPosition -= speed;
+          break;
+        case Direction.SouthEast:
+          obstacle.xPosition -= speed;
+          obstacle.yPosition -= speed;
+          break;
+        case Direction.South:
+          obstacle.yPosition -= speed;
+          break;
+        case Direction.SouthWest:
+          obstacle.xPosition += speed;
+          obstacle.yPosition -= speed;
+          break;
+        case Direction.West:
+          obstacle.xPosition += speed;
+          break;
+        default:
+          break;
+      }
+      this.game.canvas.draw(obstacle);
+      return obstacle;
+    });
+  }
+
+  public createNewObstacles(direction: Direction) {
+    let minX = 0 - Game.gameBoardPadding;
+    let maxX = this.game.canvas.width + Game.gameBoardPadding;
+    let minY = this.game.canvas.height;
+    let maxY = this.game.canvas.height + Game.gameBoardPadding;
+
+    if (direction === Direction.West) {
+      minX = 0 - Game.gameBoardPadding;
+      maxX = 0;
+      minY = 0;
+      maxY = this.game.canvas.height;
+    }
+    if (direction === Direction.East) {
+      minX = this.game.canvas.width;
+      maxX = this.game.canvas.width + Game.gameBoardPadding;
+      minY = 0;
+      maxY = this.game.canvas.height;
+    }
+
+    let newObstacles: ObstacleModel[] = [];
+    if (
+      randomBetween(0, Game.chanceOfNewObstacle) === Game.chanceOfNewObstacle
+    ) {
+      newObstacles = this.generateRandomObstacles(1, minX, maxX, minY, maxY);
+    }
+
+    this.game.obstacles = this.game.obstacles.concat(newObstacles);
+  }
+
+  public removeOldObstacles() {
+    this.game.obstacles = this.game.obstacles.filter(
+      obstacle => obstacle.yPosition >= 0 - Number(obstacle.image.height) - 500
+    );
   }
 }

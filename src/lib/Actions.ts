@@ -187,7 +187,7 @@ export default class Actions {
     const currentDirection = this.game.hero.direction;
     this.game.hero.isMoving = true;
     this.game.hero.direction = direction;
-    this.game.moveExistingObstacles(2);
+    this.game.obstacleHelper.moveExistingObstacles(2);
     this.game.nextFrame();
     this.game.hero.direction = currentDirection;
     this.game.hero.isMoving = false;

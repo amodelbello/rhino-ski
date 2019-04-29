@@ -8,7 +8,7 @@ import {
   GameStatus,
   ValidControl,
 } from '../types/Enum';
-import { randomBetween, closeEnough } from './Util';
+import { closeEnough } from './Util';
 import Character from '../types/CharacterType';
 import Obstacle from '../types/ObstacleType';
 import Controls from './Controls';
@@ -22,9 +22,9 @@ export default class Game {
   private actions: Actions;
   private setIsPaused: Function;
   private heroHelper: HeroHelper;
-  private obstacleHelper: ObstacleHelper;
 
   public canvas: CanvasHelper;
+  public obstacleHelper: ObstacleHelper;
   public images: Record<string, any>;
   public obstacles: Obstacle[];
   public gameStatus: GameStatus = 0;
@@ -134,9 +134,9 @@ export default class Game {
         this.checkForCollision();
       }
 
-      this.moveExistingObstacles();
-      this.createNewObstacles(this.hero.direction);
-      this.removeOldObstacles();
+      this.obstacleHelper.moveExistingObstacles();
+      this.obstacleHelper.createNewObstacles(this.hero.direction);
+      this.obstacleHelper.removeOldObstacles();
 
       this.canvas.draw(this.hero);
     }
@@ -164,77 +164,5 @@ export default class Game {
         }
       }
     });
-  }
-
-  public moveExistingObstacles(speed: number = this.hero.speed) {
-    this.obstacles = this.obstacles.map(obstacle => {
-      switch (this.hero.direction) {
-        case Direction.North:
-          obstacle.yPosition += speed;
-          break;
-        case Direction.East:
-          obstacle.xPosition -= speed;
-          break;
-        case Direction.SouthEast:
-          obstacle.xPosition -= speed;
-          obstacle.yPosition -= speed;
-          break;
-        case Direction.South:
-          obstacle.yPosition -= speed;
-          break;
-        case Direction.SouthWest:
-          obstacle.xPosition += speed;
-          obstacle.yPosition -= speed;
-          break;
-        case Direction.West:
-          obstacle.xPosition += speed;
-          break;
-        default:
-          break;
-      }
-      this.canvas.draw(obstacle);
-      return obstacle;
-    });
-  }
-
-  private createNewObstacles(direction: Direction) {
-    let minX = 0 - Game.gameBoardPadding;
-    let maxX = this.canvas.width + Game.gameBoardPadding;
-    let minY = this.canvas.height;
-    let maxY = this.canvas.height + Game.gameBoardPadding;
-
-    if (direction === Direction.West) {
-      minX = 0 - Game.gameBoardPadding;
-      maxX = 0;
-      minY = 0;
-      maxY = this.canvas.height;
-    }
-    if (direction === Direction.East) {
-      minX = this.canvas.width;
-      maxX = this.canvas.width + Game.gameBoardPadding;
-      minY = 0;
-      maxY = this.canvas.height;
-    }
-
-    let newObstacles: Obstacle[] = [];
-    if (
-      randomBetween(0, Game.chanceOfNewObstacle) === Game.chanceOfNewObstacle
-    ) {
-      newObstacles = this.obstacleHelper.generateRandomObstacles(
-        1,
-        minX,
-        maxX,
-        minY,
-        maxY
-      );
-    }
-
-    this.obstacles = this.obstacles.concat(newObstacles);
-  }
-
-  private removeOldObstacles() {
-    this.obstacles = this.obstacles.filter(
-      obstacle => obstacle.yPosition >= 0 - Number(obstacle.image.height) - 500
-    );
   }
 }
