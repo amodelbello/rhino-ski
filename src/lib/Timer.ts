@@ -28,7 +28,7 @@ export default class Timer {
     return value;
   }
 
-  public start(): void {
+  public start(callback?: Function): void {
     if (!this.isRunning) {
       this.isRunning = true;
       const aSecond = 1000;
@@ -37,6 +37,9 @@ export default class Timer {
           this.remaining = 0;
           this.game.setTimeRemaining('0');
           clearInterval(this.timeInterval);
+          if (callback !== undefined) {
+            callback();
+          }
         } else {
           this.remaining = this.remaining - aSecond;
           this.game.setTimeRemaining(this.getTimeRemaining());

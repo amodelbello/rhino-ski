@@ -44,7 +44,7 @@ export default class Hero {
     }
   }
 
-  public doJump(): void {
+  public jump(): void {
     if (this.game.currentJumpingFrame >= config.jumpingFramesTotalCount) {
       this.game.hero.isJumping = false;
       this.game.hero.image = this.getHeroImageByDirection();

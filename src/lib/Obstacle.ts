@@ -105,8 +105,13 @@ export default class Obstacle {
         default:
           break;
       }
-      this.game.canvasHelper.draw(obstacle);
       return obstacle;
+    });
+  }
+
+  public drawObstacles(): void {
+    this.game.obstacles.forEach(obstacle => {
+      this.game.canvasHelper.draw(obstacle);
     });
   }
 

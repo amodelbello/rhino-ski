@@ -115,22 +115,46 @@ export default class Game {
   };
 
   public nextFrame(): void {
-    if (this.hero.isMoving && !this.isPaused) {
+    if (!this.isPaused) {
       this.canvasHelper.clear();
 
-      if (this.hero.isJumping) {
-        this.heroHelper.doJump();
-      } else {
-        this.checkForCollision();
+      if (this.villain.isMoving) {
+        this.villainHelper.walk();
+        if (this.heroIsCaught()) {
+          this.gameStatus = GameStatus.Dead;
+          this.villain.isMoving = false;
+          this.hero.isMoving = false;
+          this.villain.isEating = true;
+        }
       }
 
-      this.obstacleHelper.moveExistingObstacles();
+      if (this.villain.isEating) {
+        this.villainHelper.eat();
+      }
+
+      if (this.hero.isMoving) {
+        this.obstacleHelper.moveExistingObstacles();
+        if (this.hero.isJumping) {
+          this.heroHelper.jump();
+        } else {
+          this.checkForCollision();
+        }
+      }
+
       this.obstacleHelper.createNewObstacles(this.hero.direction);
       this.obstacleHelper.removeOldObstacles();
+      this.obstacleHelper.drawObstacles();
 
-      this.canvasHelper.draw(this.hero);
       this.canvasHelper.draw(this.villain);
+
+      if (!this.heroIsCaught()) {
+        this.canvasHelper.draw(this.hero);
+      }
     }
+  }
+
+  private heroIsCaught() {
+    return closeEnough(this.hero.xPosition, this.villain.xPosition, 5);
   }
 
   private checkForCollision(): void {

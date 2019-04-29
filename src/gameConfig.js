@@ -4,7 +4,8 @@ const config = {
   chanceOfNewObstacle: 5, // the lower the number the more likely the chance. Think 1 in x.
   defaultSpeed: 3,
   jumpingFramesTotalCount: 50,
-  timeLimit: 3,
+  eatingFramesTotalCount: 60,
+  timeLimit: 10,
 };
 
 export default config;
