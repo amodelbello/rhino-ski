@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from './components/Header';
 import Canvas from './components/Canvas';
-import Toggle from './components/Toggle';
-import Modal from './components/Modal';
+import PauseModal from './components/modals/PauseModal';
 
 import './App.css';
 
@@ -26,15 +25,7 @@ const App = () => {
           isPaused={isPaused}
           setIsPaused={setIsPaused}
         />
-        <Toggle on={isPaused} toggle={togglePause}>
-          {({ on, toggle }) => {
-            return (
-              <Modal on={on} toggle={toggle}>
-                <h1>Paused</h1>
-              </Modal>
-            );
-          }}
-        </Toggle>
+        <PauseModal on={isPaused} toggle={togglePause} />
       </div>
     </Styles>
   );
