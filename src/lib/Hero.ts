@@ -54,6 +54,7 @@ export default class Hero {
     }
   }
 
+  // FIXME: I dont' think this method is doing anything...
   public heroCanMove(): boolean {
     if (
       this.game.gameStatus !== GameStatus.Dying &&

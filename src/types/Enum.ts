@@ -60,6 +60,15 @@ export enum JumpStage {
   Five = 'skierJump5',
 }
 
+export enum EatStage {
+  One = 'rhinoLift',
+  Two = 'rhinoLiftMouthOpen',
+  Three = 'rhinoLiftEat1',
+  Four = 'rhinoLiftEat2',
+  Five = 'rhinoLiftEat3',
+  Six = 'rhinoLiftEat4',
+}
+
 export enum ControlMethod {
   Null = 'null',
   KeyDown = 'keydown',

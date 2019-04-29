@@ -5,5 +5,6 @@ export default interface Character extends Item {
   direction: Direction;
   speed: number;
   isMoving: boolean;
-  isJumping: boolean;
+  isJumping?: boolean;
+  isEating?: boolean;
 }

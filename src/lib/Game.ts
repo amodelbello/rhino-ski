@@ -9,6 +9,7 @@ import Obstacle from '../types/ObstacleType';
 import Controls from './Controls';
 import Actions from './Actions';
 import HeroHelper from './Hero';
+import VillainHelper from './Villain';
 import ObstacleHelper from './Obstacle';
 
 export default class Game {
@@ -19,14 +20,17 @@ export default class Game {
   private controls: Controls;
 
   public heroHelper: HeroHelper;
-  public actionsHelper: Actions;
-  public canvasHelper: CanvasHelper;
-  public obstacleHelper: ObstacleHelper;
-  public images: Record<string, any>;
-  public obstacles: Obstacle[];
-  public gameStatus: GameStatus = 0;
   public hero: Character;
+  public villainHelper: VillainHelper;
+  public villain: Character;
+  public actionsHelper: Actions;
+  public obstacleHelper: ObstacleHelper;
+  public obstacles: Obstacle[];
+  public canvasHelper: CanvasHelper;
+  public images: Record<string, any>;
+  public gameStatus: GameStatus = 0;
   public currentJumpingFrame: number;
+  public currentEatingFrame: number;
   public isPaused: boolean;
   public setIsPaused: Function;
 
@@ -38,14 +42,17 @@ export default class Game {
     this.canvasHelper = canvas;
     this.images = images;
     this.heroHelper = new HeroHelper(this);
-    this.obstacleHelper = new ObstacleHelper(this);
     this.hero = this.heroHelper.initHero();
+    this.villainHelper = new VillainHelper(this);
+    this.villain = this.villainHelper.initVillain();
+    this.obstacleHelper = new ObstacleHelper(this);
     this.obstacles = this.obstacleHelper.generateRandomObstacles(
       config.intialNumberOfObstacles
     );
     this.controls = new Controls(this);
     this.actionsHelper = new Actions(this);
     this.currentJumpingFrame = 0;
+    this.currentEatingFrame = 0;
 
     // TODO: isPaused should probably be passed into this class, not set like this
     this.isPaused = false;
@@ -70,11 +77,12 @@ export default class Game {
       }
     });
 
-    // Initialize hero and obstacles
+    // Draw hero, villain, and obstacles
     this.canvasHelper.draw(this.hero);
     this.obstacles.forEach(obstacle => {
       this.canvasHelper.draw(obstacle);
     });
+    this.canvasHelper.draw(this.villain);
 
     // Set initial game status
     this.gameStatus = GameStatus.Stopped;
@@ -111,6 +119,7 @@ export default class Game {
       this.obstacleHelper.removeOldObstacles();
 
       this.canvasHelper.draw(this.hero);
+      this.canvasHelper.draw(this.villain);
     }
   }
 
