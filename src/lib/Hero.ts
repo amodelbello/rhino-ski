@@ -13,8 +13,8 @@ export default class Hero {
     const image = this.game.images.skierRight;
     return {
       image,
-      xPosition: this.game.canvas.width / 2 - image.width / 2,
-      yPosition: this.game.canvas.height / 2 - image.height / 2,
+      xPosition: this.game.canvasHelper.width / 2 - image.width / 2,
+      yPosition: this.game.canvasHelper.height / 2 - image.height / 2,
       direction: Direction.East,
       speed: Game.defaultSpeed,
       isMoving: false,

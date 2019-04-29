@@ -27,19 +27,19 @@ export default class Controls {
     switch (control) {
       case ValidControl.Up:
       case ValidControl.W:
-        this.game.actions.moveUp();
+        this.game.actionsHelper.moveUp();
         break;
       case ValidControl.Right:
       case ValidControl.D:
-        this.game.actions.moveRight();
+        this.game.actionsHelper.moveRight();
         break;
       case ValidControl.Down:
       case ValidControl.S:
-        this.game.actions.moveDown();
+        this.game.actionsHelper.moveDown();
         break;
       case ValidControl.Left:
       case ValidControl.A:
-        this.game.actions.moveLeft();
+        this.game.actionsHelper.moveLeft();
         break;
       case ValidControl.P:
         this.game.setIsPaused(!this.game.isPaused);

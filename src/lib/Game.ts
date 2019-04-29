@@ -16,8 +16,8 @@ export default class Game {
   private controls: Controls;
   private heroHelper: HeroHelper;
 
-  public actions: Actions;
-  public canvas: CanvasHelper;
+  public actionsHelper: Actions;
+  public canvasHelper: CanvasHelper;
   public obstacleHelper: ObstacleHelper;
   public images: Record<string, any>;
   public obstacles: Obstacle[];
@@ -39,7 +39,7 @@ export default class Game {
     images: Record<string, any>,
     stateActions: any
   ) {
-    this.canvas = canvas;
+    this.canvasHelper = canvas;
     this.images = images;
     this.heroHelper = new HeroHelper(this);
     this.obstacleHelper = new ObstacleHelper(this);
@@ -48,7 +48,7 @@ export default class Game {
       Game.intialNumberOfObstacles
     );
     this.controls = new Controls(this);
-    this.actions = new Actions(this);
+    this.actionsHelper = new Actions(this);
     this.currentJumpingFrame = 0;
 
     // TODO: isPaused should probably be passed into this class, not set like this
@@ -66,9 +66,9 @@ export default class Game {
     });
 
     // Initialize hero and obstacles
-    this.canvas.draw(this.hero);
+    this.canvasHelper.draw(this.hero);
     this.obstacles.forEach(obstacle => {
-      this.canvas.draw(obstacle);
+      this.canvasHelper.draw(obstacle);
     });
 
     // Set initial game status
@@ -93,7 +93,7 @@ export default class Game {
 
   public nextFrame() {
     if (this.hero.isMoving && !this.isPaused) {
-      this.canvas.clear();
+      this.canvasHelper.clear();
 
       if (this.hero.isJumping) {
         this.heroHelper.doJump();
@@ -105,7 +105,7 @@ export default class Game {
       this.obstacleHelper.createNewObstacles(this.hero.direction);
       this.obstacleHelper.removeOldObstacles();
 
-      this.canvas.draw(this.hero);
+      this.canvasHelper.draw(this.hero);
     }
   }
 

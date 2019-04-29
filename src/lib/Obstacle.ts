@@ -13,9 +13,9 @@ export default class Obstacle {
   public generateRandomObstacles(
     count: number,
     minX = 0,
-    maxX = this.game.canvas.width,
+    maxX = this.game.canvasHelper.width,
     minY = 0,
-    maxY = this.game.canvas.height
+    maxY = this.game.canvasHelper.height
   ) {
     const obstacles: ObstacleModel[] = [];
     for (let x = 0; x < count; x++) {
@@ -49,9 +49,9 @@ export default class Obstacle {
 
   private getRandomObstaclePosition(
     minX = 0,
-    maxX = this.game.canvas.width,
+    maxX = this.game.canvasHelper.width,
     minY = 0,
-    maxY = this.game.canvas.height
+    maxY = this.game.canvasHelper.height
   ): number[] {
     const xPosition = randomBetween(minX, maxX);
     const yPosition = randomBetween(minY, maxY);
@@ -104,28 +104,28 @@ export default class Obstacle {
         default:
           break;
       }
-      this.game.canvas.draw(obstacle);
+      this.game.canvasHelper.draw(obstacle);
       return obstacle;
     });
   }
 
   public createNewObstacles(direction: Direction) {
     let minX = 0 - Game.gameBoardPadding;
-    let maxX = this.game.canvas.width + Game.gameBoardPadding;
-    let minY = this.game.canvas.height;
-    let maxY = this.game.canvas.height + Game.gameBoardPadding;
+    let maxX = this.game.canvasHelper.width + Game.gameBoardPadding;
+    let minY = this.game.canvasHelper.height;
+    let maxY = this.game.canvasHelper.height + Game.gameBoardPadding;
 
     if (direction === Direction.West) {
       minX = 0 - Game.gameBoardPadding;
       maxX = 0;
       minY = 0;
-      maxY = this.game.canvas.height;
+      maxY = this.game.canvasHelper.height;
     }
     if (direction === Direction.East) {
-      minX = this.game.canvas.width;
-      maxX = this.game.canvas.width + Game.gameBoardPadding;
+      minX = this.game.canvasHelper.width;
+      maxX = this.game.canvasHelper.width + Game.gameBoardPadding;
       minY = 0;
-      maxY = this.game.canvas.height;
+      maxY = this.game.canvasHelper.height;
     }
 
     let newObstacles: ObstacleModel[] = [];
