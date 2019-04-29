@@ -2,12 +2,7 @@ import { fromEvent } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
 import CanvasHelper from './Canvas';
-import {
-  Direction,
-  ObstacleType,
-  GameStatus,
-  ValidControl,
-} from '../types/Enum';
+import { Direction, ObstacleType, GameStatus } from '../types/Enum';
 import { closeEnough } from './Util';
 import Character from '../types/CharacterType';
 import Obstacle from '../types/ObstacleType';
@@ -19,10 +14,9 @@ import ObstacleHelper from './Obstacle';
 export default class Game {
   private keyboard$ = fromEvent(document, 'keydown').pipe(pluck('keyCode'));
   private controls: Controls;
-  private actions: Actions;
-  private setIsPaused: Function;
   private heroHelper: HeroHelper;
 
+  public actions: Actions;
   public canvas: CanvasHelper;
   public obstacleHelper: ObstacleHelper;
   public images: Record<string, any>;
@@ -31,6 +25,7 @@ export default class Game {
   public hero: Character;
   public currentJumpingFrame: number;
   public isPaused: boolean;
+  public setIsPaused: Function;
 
   // TODO: Make all of these configurable
   public static intialNumberOfObstacles = 50;
@@ -52,7 +47,7 @@ export default class Game {
     this.obstacles = this.obstacleHelper.generateRandomObstacles(
       Game.intialNumberOfObstacles
     );
-    this.controls = new Controls();
+    this.controls = new Controls(this);
     this.actions = new Actions(this);
     this.currentJumpingFrame = 0;
 
@@ -66,7 +61,7 @@ export default class Game {
     this.keyboard$.subscribe(code => {
       if (this.controls.controlIsValid(Number(code))) {
         this.controls.setCurrentControl(Number(code));
-        this.fireActionFromControl(this.controls.currentControl);
+        this.controls.fireActionFromControl(this.controls.currentControl);
       }
     });
 
@@ -95,34 +90,6 @@ export default class Game {
     this.nextFrame();
     requestAnimationFrame(this.gameLoop);
   };
-
-  private fireActionFromControl(control: ValidControl) {
-    switch (control) {
-      case ValidControl.Up:
-      case ValidControl.W:
-        this.actions.moveUp();
-        break;
-      case ValidControl.Right:
-      case ValidControl.D:
-        this.actions.moveRight();
-        break;
-      case ValidControl.Down:
-      case ValidControl.S:
-        this.actions.moveDown();
-        break;
-      case ValidControl.Left:
-      case ValidControl.A:
-        this.actions.moveLeft();
-        break;
-      case ValidControl.P:
-        this.setIsPaused(!this.isPaused);
-        break;
-      case ValidControl.Space:
-        break;
-      default:
-        break;
-    }
-  }
 
   public nextFrame() {
     if (this.hero.isMoving && !this.isPaused) {
