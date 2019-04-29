@@ -1,3 +1,4 @@
+import config from '../gameConfig';
 import Game from './Game';
 import ObstacleModel from '../types/ObstacleType';
 import { Direction, ObstacleType } from '../types/Enum';
@@ -110,27 +111,28 @@ export default class Obstacle {
   }
 
   public createNewObstacles(direction: Direction) {
-    let minX = 0 - Game.gameBoardPadding;
-    let maxX = this.game.canvasHelper.width + Game.gameBoardPadding;
+    let minX = 0 - config.gameBoardPadding;
+    let maxX = this.game.canvasHelper.width + config.gameBoardPadding;
     let minY = this.game.canvasHelper.height;
-    let maxY = this.game.canvasHelper.height + Game.gameBoardPadding;
+    let maxY = this.game.canvasHelper.height + config.gameBoardPadding;
 
     if (direction === Direction.West) {
-      minX = 0 - Game.gameBoardPadding;
+      minX = 0 - config.gameBoardPadding;
       maxX = 0;
       minY = 0;
       maxY = this.game.canvasHelper.height;
     }
     if (direction === Direction.East) {
       minX = this.game.canvasHelper.width;
-      maxX = this.game.canvasHelper.width + Game.gameBoardPadding;
+      maxX = this.game.canvasHelper.width + config.gameBoardPadding;
       minY = 0;
       maxY = this.game.canvasHelper.height;
     }
 
     let newObstacles: ObstacleModel[] = [];
     if (
-      randomBetween(0, Game.chanceOfNewObstacle) === Game.chanceOfNewObstacle
+      randomBetween(0, config.chanceOfNewObstacle) ===
+      config.chanceOfNewObstacle
     ) {
       newObstacles = this.generateRandomObstacles(1, minX, maxX, minY, maxY);
     }

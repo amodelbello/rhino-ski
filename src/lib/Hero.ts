@@ -1,3 +1,4 @@
+import config from '../gameConfig';
 import Game from './Game';
 import Character from '../types/CharacterType';
 import { Direction, JumpStage } from '../types/Enum';
@@ -16,7 +17,7 @@ export default class Hero {
       xPosition: this.game.canvasHelper.width / 2 - image.width / 2,
       yPosition: this.game.canvasHelper.height / 2 - image.height / 2,
       direction: Direction.East,
-      speed: Game.defaultSpeed,
+      speed: config.defaultSpeed,
       isMoving: false,
       isJumping: false,
     };
@@ -44,7 +45,7 @@ export default class Hero {
   }
 
   public doJump() {
-    if (this.game.currentJumpingFrame >= Game.jumpingFramesTotalCount) {
+    if (this.game.currentJumpingFrame >= config.jumpingFramesTotalCount) {
       this.game.hero.isJumping = false;
       this.game.hero.image = this.getHeroImageByDirection();
     } else {

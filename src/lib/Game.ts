@@ -1,6 +1,7 @@
 import { fromEvent } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
+import config from '../gameConfig';
 import CanvasHelper from './Canvas';
 import { Direction, ObstacleType, GameStatus } from '../types/Enum';
 import { closeEnough } from './Util';
@@ -27,13 +28,6 @@ export default class Game {
   public isPaused: boolean;
   public setIsPaused: Function;
 
-  // TODO: Make all of these configurable
-  public static intialNumberOfObstacles = 50;
-  public static gameBoardPadding = 100;
-  public static chanceOfNewObstacle = 5; // the lower the number the more likely the chance
-  public static defaultSpeed = 3;
-  public static jumpingFramesTotalCount = 50;
-
   public constructor(
     canvas: CanvasHelper,
     images: Record<string, any>,
@@ -45,7 +39,7 @@ export default class Game {
     this.obstacleHelper = new ObstacleHelper(this);
     this.hero = this.heroHelper.initHero();
     this.obstacles = this.obstacleHelper.generateRandomObstacles(
-      Game.intialNumberOfObstacles
+      config.intialNumberOfObstacles
     );
     this.controls = new Controls(this);
     this.actionsHelper = new Actions(this);
