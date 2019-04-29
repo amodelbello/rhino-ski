@@ -33,8 +33,9 @@ export enum ValidControl {
 
 export enum GameStatus {
   Unstarted = 0,
-  Skiing = 1,
-  Dead = 5,
+  Skiing = 2,
+  Dead = 3,
+  Over = 4,
 }
 
 export enum GameAction {

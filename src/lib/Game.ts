@@ -37,6 +37,7 @@ export default class Game {
   public isPaused: boolean;
   public setIsPaused: Function;
   public setScore: Function;
+  public setHiScore: Function;
   public setTimeRemaining: Function;
 
   public constructor(
@@ -65,6 +66,7 @@ export default class Game {
     this.setIsPaused = stateActions.setIsPaused;
     this.score = 0;
     this.setScore = stateActions.setScore;
+    this.setHiScore = stateActions.setHiScore;
     this.setTimeRemaining = stateActions.setTimeRemaining;
   }
 
@@ -114,7 +116,9 @@ export default class Game {
 
   private gameLoop = (): void => {
     this.nextFrame();
-    requestAnimationFrame(this.gameLoop);
+    if (this.gameStatus !== GameStatus.Over) {
+      requestAnimationFrame(this.gameLoop);
+    }
   };
 
   public nextFrame(): void {
@@ -188,5 +192,11 @@ export default class Game {
   private scoreRamp(): void {
     this.score += config.rampScoreValue;
     this.setScore(this.score);
+
+    const hiScore = Number(localStorage.getItem(config.hiScoreFieldName));
+    if (!hiScore || hiScore < this.score) {
+      localStorage.setItem(config.hiScoreFieldName, this.score.toString());
+      this.setHiScore(this.score);
+    }
   }
 }

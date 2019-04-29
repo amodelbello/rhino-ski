@@ -19,6 +19,7 @@ function Canvas({
   isPaused,
   setIsPaused,
   setScore,
+  setHiScore,
   timeRemaining,
   setTimeRemaining,
 }: {
@@ -29,6 +30,7 @@ function Canvas({
   isPaused: boolean;
   setIsPaused: Dispatch<SetStateAction<boolean>>;
   setScore: Dispatch<SetStateAction<number>>;
+  setHiScore: Dispatch<SetStateAction<number>>;
   timeRemaining: number;
   setTimeRemaining: Dispatch<SetStateAction<number>>;
 }) {
@@ -51,6 +53,7 @@ function Canvas({
           timeRemaining,
           setTimeRemaining,
           setScore,
+          setHiScore,
         })
       );
     }
@@ -91,8 +94,6 @@ function Canvas({
 
 const Styles = styled.div`
   canvas {
-    outline: 1px solid black;
-    outline-offset: -1px;
   }
 `;
 

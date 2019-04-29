@@ -1,7 +1,7 @@
 import config from '../gameConfig';
 import Game from './Game';
 import Character from '../types/CharacterType';
-import { Direction, EatStage } from '../types/Enum';
+import { Direction, EatStage, GameStatus } from '../types/Enum';
 
 export default class Villain {
   public game: Game;
@@ -42,6 +42,7 @@ export default class Villain {
     if (this.game.currentEatingFrame >= config.eatingFramesTotalCount) {
       this.game.villain.isEating = false;
       this.game.hero.image = this.game.images.rhinoLiftEat4;
+      this.game.gameStatus = GameStatus.Over;
     } else {
       this.game.currentEatingFrame++;
       this.game.villain.image = this.game.images[this.determineEatingStage()];

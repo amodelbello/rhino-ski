@@ -7,6 +7,7 @@ const config = {
   eatingFramesTotalCount: 60,
   timeLimit: 10,
   rampScoreValue: 150,
+  hiScoreFieldName: 'rhino-ski-hiscore',
 };
 
 export default config;

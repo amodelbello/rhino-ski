@@ -14,6 +14,7 @@ const App = () => {
 
   const [isPaused, setIsPaused] = useState(false);
   const [score, setScore] = useState(0);
+  const [hiScore, setHiScore] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(config.timeLimit);
   const [game, setGame] = useState();
 
@@ -23,7 +24,7 @@ const App = () => {
   return (
     <Styles>
       <div className="App">
-        <Header timeRemaining={timeRemaining} score={score} />
+        <Header timeRemaining={timeRemaining} score={score} hiScore={hiScore} />
         <Canvas
           width={canvasWidth}
           height={canvasHeight}
@@ -33,6 +34,7 @@ const App = () => {
           setIsPaused={setIsPaused}
           timeRemaining={timeRemaining}
           setScore={setScore}
+          setHiScore={setHiScore}
           setTimeRemaining={setTimeRemaining}
         />
         <PauseModal on={isPaused} toggle={togglePause} />
