@@ -127,6 +127,7 @@ export default class Game {
       config.intialNumberOfObstacles
     );
     this.timer = new Timer(this, config.timeLimit);
+    this.setTimeRemaining(config.timeLimit);
     this.currentJumpingFrame = 0;
     this.currentEatingFrame = 0;
     this.isPaused = false;
