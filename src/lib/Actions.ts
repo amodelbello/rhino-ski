@@ -53,6 +53,7 @@ export default class Actions {
   private kickOffTimer() {
     if (this.game.gameStatus === GameStatus.Unstarted) {
       this.game.setGameStatus(GameStatus.Skiing);
+      this.game.gameStatus = GameStatus.Skiing;
       this.game.timer.start(() => {
         this.game.villain.isMoving = true;
       });

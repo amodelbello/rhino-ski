@@ -116,7 +116,9 @@ export default class Game {
   public resume(): void {
     this.isPaused = false;
     if (this.gameStatus !== GameStatus.Unstarted) {
-      this.timer.start();
+      this.timer.start(() => {
+        this.villain.isMoving = true;
+      });
     }
   }
 
