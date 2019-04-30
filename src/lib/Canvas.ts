@@ -1,4 +1,4 @@
-import Item from '../types/ItemType';
+import { Item } from '../types/Type';
 
 export default class Canvas {
   private ctx: CanvasRenderingContext2D;

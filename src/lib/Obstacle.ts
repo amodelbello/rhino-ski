@@ -1,6 +1,6 @@
 import config from '../gameConfig';
 import Game from './Game';
-import ObstacleModel from '../types/ObstacleType';
+import { Obstacle as ObstacleModel } from '../types/Type';
 import { Direction, ObstacleType } from '../types/Enum';
 import { randomBetween, closeEnough } from './Util';
 

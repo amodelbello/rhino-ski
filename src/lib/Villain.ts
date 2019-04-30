@@ -1,6 +1,6 @@
 import config from '../gameConfig';
 import Game from './Game';
-import Character from '../types/CharacterType';
+import { Character } from '../types/Type';
 import { Direction, EatStage, GameStatus } from '../types/Enum';
 
 export default class Villain {
