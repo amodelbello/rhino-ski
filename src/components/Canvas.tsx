@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import CanvasHelper from '../lib/Canvas';
 import { assets, assetPromises } from '../lib/AssetLoader';
 import Game from '../lib/Game';
+import { GameStatus } from '../types/Enum';
 
 function Canvas({
   width,
@@ -22,6 +23,9 @@ function Canvas({
   setHiScore,
   timeRemaining,
   setTimeRemaining,
+  infoModalIsDisplayed,
+  gameStatus,
+  setGameStatus,
 }: {
   width: number;
   height: number;
@@ -33,6 +37,9 @@ function Canvas({
   setHiScore: Dispatch<SetStateAction<number>>;
   timeRemaining: number;
   setTimeRemaining: Dispatch<SetStateAction<number>>;
+  infoModalIsDisplayed: boolean;
+  gameStatus: GameStatus;
+  setGameStatus: Dispatch<SetStateAction<GameStatus>>;
 }) {
   const canvasRef: any = useRef(HTMLCanvasElement);
   const [ctx, setCtx] = useState();
@@ -54,6 +61,9 @@ function Canvas({
           setTimeRemaining,
           setScore,
           setHiScore,
+          infoModalIsDisplayed,
+          gameStatus,
+          setGameStatus,
         })
       );
     }

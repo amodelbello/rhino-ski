@@ -115,7 +115,7 @@ export default class Obstacle {
     });
   }
 
-  public createNewObstacles(direction: Direction): void {
+  public createNewObstacle(direction: Direction): void {
     let minX = 0 - config.gameBoardPadding;
     let maxX = this.game.canvasHelper.width + config.gameBoardPadding;
     let minY = this.game.canvasHelper.height;

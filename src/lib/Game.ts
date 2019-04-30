@@ -1,4 +1,4 @@
-import { fromEvent, merge } from 'rxjs';
+import { fromEvent, merge, Subscription } from 'rxjs';
 
 import config from '../gameConfig';
 import CanvasHelper from './Canvas';
@@ -18,8 +18,10 @@ export default class Game {
     fromEvent(document, 'keydown'),
     fromEvent(document, 'keyup')
   );
+  private keyboardSubscription: Subscription = Subscription.EMPTY;
   private controls: Controls;
   private score: number;
+  private infoModalIsDisplayed: boolean;
 
   public heroHelper: HeroHelper;
   public hero: Character;
@@ -31,7 +33,8 @@ export default class Game {
   public canvasHelper: CanvasHelper;
   public images: Record<string, any>;
   public timer: Timer;
-  public gameStatus: GameStatus = 0;
+  public gameStatus: GameStatus;
+  public setGameStatus: Function;
   public currentJumpingFrame: number;
   public currentEatingFrame: number;
   public isPaused: boolean;
@@ -68,11 +71,14 @@ export default class Game {
     this.setScore = stateActions.setScore;
     this.setHiScore = stateActions.setHiScore;
     this.setTimeRemaining = stateActions.setTimeRemaining;
+    this.infoModalIsDisplayed = stateActions.infoModalIsDisplayed;
+    this.gameStatus = stateActions.gameStatus;
+    this.setGameStatus = stateActions.setGameStatus;
   }
 
   public start(): void {
     // Subscribe to keyboard observable
-    this.keyboard$.subscribe((event: Event) => {
+    this.keyboardSubscription = this.keyboard$.subscribe((event: Event) => {
       if (event instanceof KeyboardEvent) {
         const { keyCode, type } = event;
         if (this.controls.controlIsValid(Number(keyCode))) {
@@ -96,7 +102,7 @@ export default class Game {
     this.canvasHelper.draw(this.villain);
 
     // Set initial game status
-    this.gameStatus = GameStatus.Unstarted;
+    this.setGameStatus(GameStatus.Unstarted);
 
     // Run the game
     this.gameLoop();
@@ -114,10 +120,40 @@ export default class Game {
     }
   }
 
+  public restart(): void {
+    this.hero = this.heroHelper.initHero();
+    this.villain = this.villainHelper.initVillain();
+    this.obstacles = this.obstacleHelper.generateRandomObstacles(
+      config.intialNumberOfObstacles
+    );
+    this.timer = new Timer(this, config.timeLimit);
+    this.currentJumpingFrame = 0;
+    this.currentEatingFrame = 0;
+    this.isPaused = false;
+    this.score = 0;
+    this.setGameStatus(GameStatus.Unstarted);
+    this.gameStatus = GameStatus.Unstarted;
+    this.start();
+  }
+
+  public canPause(): boolean {
+    if (
+      this.gameStatus !== GameStatus.Unstarted &&
+      this.gameStatus !== GameStatus.Dead &&
+      this.gameStatus !== GameStatus.Over &&
+      !this.infoModalIsDisplayed
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   private gameLoop = (): void => {
-    this.nextFrame();
     if (this.gameStatus !== GameStatus.Over) {
+      this.nextFrame();
       requestAnimationFrame(this.gameLoop);
+    } else {
+      this.keyboardSubscription.unsubscribe();
     }
   };
 
@@ -128,7 +164,7 @@ export default class Game {
       if (this.villain.isMoving) {
         this.villainHelper.walk();
         if (this.heroIsCaught()) {
-          this.gameStatus = GameStatus.Dead;
+          this.setGameStatus(GameStatus.Dead);
           this.villain.isMoving = false;
           this.hero.isMoving = false;
           this.villain.isEating = true;
@@ -146,10 +182,10 @@ export default class Game {
         } else {
           this.checkForCollision();
         }
+        this.obstacleHelper.createNewObstacle(this.hero.direction);
+        this.obstacleHelper.removeOldObstacles();
       }
 
-      this.obstacleHelper.createNewObstacles(this.hero.direction);
-      this.obstacleHelper.removeOldObstacles();
       this.obstacleHelper.drawObstacles();
 
       this.canvasHelper.draw(this.villain);

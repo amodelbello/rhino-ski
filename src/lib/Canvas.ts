@@ -8,7 +8,7 @@ export default class Canvas {
   public constructor(
     ctx: CanvasRenderingContext2D,
     width: number = window.innerWidth,
-    height: number = window.innerHeight
+    height: number = window.innerHeight - 100
   ) {
     this.ctx = ctx;
     this.width = width;

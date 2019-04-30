@@ -67,7 +67,9 @@ export default class Controls {
         break;
       case ValidControl.P:
         if (method === ControlMethod.KeyDown) {
-          this.game.setIsPaused(!this.game.isPaused);
+          if (this.game.canPause()) {
+            this.game.setIsPaused(!this.game.isPaused);
+          }
         }
         break;
       case ValidControl.Esc:

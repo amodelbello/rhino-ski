@@ -15,7 +15,7 @@ export default class Villain {
     return {
       image,
       xPosition: this.game.canvasHelper.width + 100,
-      yPosition: this.game.canvasHelper.height / 2 - image.height / 2,
+      yPosition: this.game.canvasHelper.height * 0.4 - image.height / 2,
       direction: Direction.East,
       speed: config.defaultSpeed,
       isMoving: false,
@@ -41,7 +41,10 @@ export default class Villain {
   public eat(): void {
     if (this.game.currentEatingFrame >= config.eatingFramesTotalCount) {
       this.game.villain.isEating = false;
-      this.game.hero.image = this.game.images.rhinoLiftEat4;
+
+      // The state hook doesn't seem to be working here...?
+      // FIXME:
+      this.game.setGameStatus(GameStatus.Over);
       this.game.gameStatus = GameStatus.Over;
     } else {
       this.game.currentEatingFrame++;

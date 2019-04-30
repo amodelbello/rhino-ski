@@ -15,7 +15,7 @@ export default class Hero {
     return {
       image,
       xPosition: this.game.canvasHelper.width / 2 - image.width / 2,
-      yPosition: this.game.canvasHelper.height / 2 - image.height / 2,
+      yPosition: this.game.canvasHelper.height * 0.4 - image.height / 2,
       direction: Direction.East,
       speed: config.defaultSpeed,
       isMoving: false,
