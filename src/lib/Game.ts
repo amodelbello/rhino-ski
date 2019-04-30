@@ -207,12 +207,12 @@ export default class Game {
         closeEnough(obstacle.yPosition, this.hero.yPosition)
       ) {
         if (obstacle.type === ObstacleType.Ramp) {
-          this.scoreRamp();
           if (
             this.hero.direction === Direction.SouthWest ||
             this.hero.direction === Direction.South ||
             this.hero.direction === Direction.SouthEast
           ) {
+            this.scoreRamp();
             this.hero.isJumping = true;
             this.currentJumpingFrame = 0;
           }
