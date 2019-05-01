@@ -50,7 +50,7 @@ export default class Actions {
     }
   }
 
-  private kickOffTimer() {
+  private kickOffTimer(): void {
     if (this.game.gameStatus === GameStatus.Unstarted) {
       this.game.setGameStatus(GameStatus.Skiing);
       this.game.gameStatus = GameStatus.Skiing;
