@@ -20,7 +20,7 @@ export default class Timer {
     return seconds * 1000;
   }
 
-  private fromMiliseconds(miliseconds: number): number {
+  private fromMilliseconds(miliseconds: number): number {
     let value = Math.floor(miliseconds / 1000);
     return value;
   }
@@ -54,6 +54,6 @@ export default class Timer {
   }
 
   public getTimeRemaining(): number {
-    return this.fromMiliseconds(this.remaining);
+    return this.fromMilliseconds(this.remaining);
   }
 }
