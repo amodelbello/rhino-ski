@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Toggle from '../elements/Toggle';
 import Modal from '../elements/Modal';
 
-const InfoModal = ({ on, toggle }: PauseModalProps) => {
+const InfoModal = ({ on, toggle }: InfoModalProps) => {
   return (
     <Toggle on={on} toggle={toggle}>
       {({ on, toggle }) => {
