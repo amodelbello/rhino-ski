@@ -19,7 +19,7 @@ export default class Game {
     fromEvent(document, 'keyup')
   );
   private keyboardSubscription: Subscription = Subscription.EMPTY;
-  private controls: Controls;
+  private controlsHelper: Controls;
   private score: number;
   private infoModalIsDisplayed: boolean;
 
@@ -59,12 +59,10 @@ export default class Game {
       config.intialNumberOfObstacles
     );
     this.timer = new Timer(this, config.timeLimit);
-    // TODO: rename
-    this.controls = new Controls(this);
+    this.controlsHelper = new Controls(this);
     this.actionsHelper = new Actions(this);
     this.currentJumpingFrame = 0;
     this.currentEatingFrame = 0;
-
     this.isPaused = false;
     this.setIsPaused = stateActions.setIsPaused;
     this.score = 0;
@@ -81,13 +79,13 @@ export default class Game {
     this.keyboardSubscription = this.keyboard$.subscribe((event: Event) => {
       if (event instanceof KeyboardEvent) {
         const { keyCode, type } = event;
-        if (this.controls.controlIsValid(Number(keyCode))) {
-          const controlMethod = this.controls.getControlMethodFromEventType(
+        if (this.controlsHelper.controlIsValid(Number(keyCode))) {
+          const controlMethod = this.controlsHelper.getControlMethodFromEventType(
             type
           );
-          this.controls.setCurrentControl(Number(keyCode));
-          this.controls.fireActionFromControl(
-            this.controls.currentControl,
+          this.controlsHelper.setCurrentControl(Number(keyCode));
+          this.controlsHelper.fireActionFromControl(
+            this.controlsHelper.currentControl,
             controlMethod
           );
         }
@@ -106,49 +104,6 @@ export default class Game {
 
     // Run the game
     this.gameLoop();
-  }
-
-  public pause(): void {
-    this.isPaused = true;
-    this.timer.stop();
-  }
-
-  public resume(): void {
-    this.isPaused = false;
-    if (this.gameStatus !== GameStatus.Unstarted) {
-      this.timer.start(() => {
-        this.villain.isMoving = true;
-      });
-    }
-  }
-
-  public restart(): void {
-    this.hero = this.heroHelper.initHero();
-    this.villain = this.villainHelper.initVillain();
-    this.obstacles = this.obstacleHelper.generateRandomObstacles(
-      config.intialNumberOfObstacles
-    );
-    this.timer = new Timer(this, config.timeLimit);
-    this.setTimeRemaining(config.timeLimit);
-    this.currentJumpingFrame = 0;
-    this.currentEatingFrame = 0;
-    this.isPaused = false;
-    this.score = 0;
-    this.setGameStatus(GameStatus.Unstarted);
-    this.gameStatus = GameStatus.Unstarted;
-    this.start();
-  }
-
-  public canPause(): boolean {
-    if (
-      this.gameStatus !== GameStatus.Unstarted &&
-      this.gameStatus !== GameStatus.Dead &&
-      this.gameStatus !== GameStatus.Over &&
-      !this.infoModalIsDisplayed
-    ) {
-      return true;
-    }
-    return false;
   }
 
   private gameLoop = (): void => {
@@ -199,10 +154,6 @@ export default class Game {
     }
   }
 
-  private heroIsCaught() {
-    return closeEnough(this.hero.xPosition, this.villain.xPosition, 5);
-  }
-
   private checkForCollision(): void {
     this.obstacles.forEach(obstacle => {
       if (
@@ -237,5 +188,52 @@ export default class Game {
       localStorage.setItem(config.hiScoreFieldName, this.score.toString());
       this.setHiScore(this.score);
     }
+  }
+
+  private heroIsCaught(): boolean {
+    return closeEnough(this.hero.xPosition, this.villain.xPosition, 5);
+  }
+
+  public restart(): void {
+    this.hero = this.heroHelper.initHero();
+    this.villain = this.villainHelper.initVillain();
+    this.obstacles = this.obstacleHelper.generateRandomObstacles(
+      config.intialNumberOfObstacles
+    );
+    this.timer = new Timer(this, config.timeLimit);
+    this.setTimeRemaining(config.timeLimit);
+    this.currentJumpingFrame = 0;
+    this.currentEatingFrame = 0;
+    this.isPaused = false;
+    this.score = 0;
+    this.setGameStatus(GameStatus.Unstarted);
+    this.gameStatus = GameStatus.Unstarted;
+    this.start();
+  }
+
+  public pause(): void {
+    this.isPaused = true;
+    this.timer.stop();
+  }
+
+  public resume(): void {
+    this.isPaused = false;
+    if (this.gameStatus !== GameStatus.Unstarted) {
+      this.timer.start(() => {
+        this.villain.isMoving = true;
+      });
+    }
+  }
+
+  public canPause(): boolean {
+    if (
+      this.gameStatus !== GameStatus.Unstarted &&
+      this.gameStatus !== GameStatus.Dead &&
+      this.gameStatus !== GameStatus.Over &&
+      !this.infoModalIsDisplayed
+    ) {
+      return true;
+    }
+    return false;
   }
 }

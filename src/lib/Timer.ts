@@ -2,8 +2,8 @@ import Game from './Game';
 
 export default class Timer {
   public game: Game;
-  public remaining: number;
   public duration: number;
+  public remaining: number;
 
   private timeInterval: number;
   private isRunning: boolean;
@@ -22,9 +22,6 @@ export default class Timer {
 
   private fromMiliseconds(miliseconds: number): number {
     let value = Math.floor(miliseconds / 1000);
-    if (value < 1) {
-      value = 0;
-    }
     return value;
   }
 
@@ -54,12 +51,6 @@ export default class Timer {
       this.isRunning = false;
       clearInterval(this.timeInterval);
     }
-  }
-
-  public reset(): void {
-    this.stop();
-    this.remaining = this.duration;
-    this.game.setTimeRemaining(this.getTimeRemaining());
   }
 
   public getTimeRemaining(): number {

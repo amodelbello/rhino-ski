@@ -31,7 +31,7 @@ export default class Villain {
     }
   }
 
-  public walk() {
+  public walk(): void {
     this.game.villain.xPosition -= this.game.villain.speed;
     if (this.game.villain.xPosition % 10 === 0) {
       this.toggleWalkingImage();
