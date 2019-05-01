@@ -38,7 +38,7 @@ const InfoModal = ({ on, toggle }: InfoModalProps) => {
   );
 };
 
-interface PauseModalProps {
+interface InfoModalProps {
   on?: boolean;
   toggle?: Function;
 }
